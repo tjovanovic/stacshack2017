@@ -59,7 +59,7 @@ def fetch_lyrics(artist, title):
 
     lines = []
     for line in lyrics_text.split('\n'):
-        line = html.unescape(line).strip()
+        line = html.unescape(line).strip().replace('"', '').replace("'", '')
         if line:
             lines.append(line)
 
@@ -106,6 +106,6 @@ if __name__ == '__main__':
     # save_songs()
     next_line, artist_song = read_songs()
     for bla in next_line.keys():
-        print(bla.replace('\'', '').replace('\"', ''))
+        print(bla)
     # print(next_line.keys())
     # print(artist_song)
