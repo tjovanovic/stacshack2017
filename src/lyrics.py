@@ -103,7 +103,9 @@ def read_songs():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    save_songs()
+    # save_songs()
     next_line, artist_song = read_songs()
-    print(next_line)
-    print(artist_song)
+    for bla in next_line.keys():
+        print(bla.replace('\'', '').replace('\"', ''))
+    # print(next_line.keys())
+    # print(artist_song)
