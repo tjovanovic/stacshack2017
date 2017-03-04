@@ -4,6 +4,7 @@ import urllib.request
 import re
 import xml.etree.ElementTree as ET
 import html
+import pickle
 
 import local_settings
 
@@ -78,14 +79,31 @@ def fetch_top(num=500):
     return top
 
 
-def test():
+def save_songs():
     # print(fetch_lyrics('Sia', 'Unstoppable'))
     # print(fetch_lyrics('Adele', "That's It, I Quit, I'm Movin' On"))
+    next_line = {}
+    artist_song = {}
     for artist, title in fetch_top(10):
-        # print(artist, title)
-        print(fetch_lyrics(artist, title))
+        lyrics = fetch_lyrics(artist, title)
+        if lyrics:
+            for line in lyrics:
+                artist_song[line] = artist, title
+            for line1, line2 in zip(lyrics, lyrics[1:]):
+                next_line[line1] = line2
+
+    pickle.dump((next_line, artist_song), open('songs', 'wb'))
+
+    return next_line, artist_song
+
+
+def read_songs():
+    return pickle.load(open('songs', 'rb'))
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    test()
+    save_songs()
+    next_line, artist_song = read_songs()
+    print(next_line)
+    print(artist_song)
