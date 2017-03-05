@@ -27,7 +27,7 @@ def love(line):
 @ask.intent("MatchIntent", convert={'first': str})
 def match(first):
     next_line, artist_song = read_songs()
-    return question(artist_song[first])
+    return question(artist_song[first.lower()][1])
 
 
 if __name__ == '__main__':
