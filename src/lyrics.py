@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 import html
 import pickle
 
-import local_settings
+# import local_settings
 
 
 logger = logging.getLogger(__name__)
