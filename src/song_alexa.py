@@ -28,19 +28,19 @@ def love():
 def set_mode(first):
 
 	if first == 'find song name':
-		session.attribute['mode'] = 1
+		session.attributes['mode'] = 1
 		msg = 'mode set to find the song name and artsit'
 
 	elif first == 'find next line':
-		session.attribute['mode'] = 2
+		session.attributes['mode'] = 2
 		msg = 'mode set to find the next line'
 
 	elif first == 'find audio':
-		session.attribute['mode'] = 3
+		session.attributes['mode'] = 3
 		msg = 'mode set to find audio'
 
 	else:
-		session.attribute['mode'] = 1
+		session.attributes['mode'] = 1
 		msg = 'mode not regonized, default find song name set'
 
 	return question(msg)
@@ -49,35 +49,41 @@ def set_mode(first):
 
 
 
-@ask.intent("AskIntent", convert={'first':str})
-def ask():
-	return 0
+@ask.intent("AskIntent", convert={'second':str})
+def ask(second):
+	session.attributes['lyric line'] = second
+
+	if session.attributes['mode'] == 1:
+		return match()
+	elif session.attributes['mode'] == 2:
+		return next_line()
+	elif session.attributes['mode'] == 3:
+		return youtube()
 
 
 
-def match(first):
+def match():
+	second =  session.attributes['lyric line']
+	next_line, artist_song = read_songs()
+	query = second.lower()
+	q = min(artist_song.keys(), key=lambda x: edit_distance(x, second))
+	dist = edit_distance(q, query)
+	print(dist)
+	if dist > 10:
+	    pass
+	return question(str(artist_song[q][0]) + ': ' + str(artist_song[q][1]))
 
-    next_line, artist_song = read_songs()
-    query = first.lower()
-    q = min(artist_song.keys(), key=lambda x: edit_distance(x, query))
-    dist = edit_distance(q, query)
-    print(dist)
-    if dist > 10:
-        pass
-    return question(str(artist_song[q][0]) + ': ' + str(artist_song[q][1]))
 
 
-
-def next_line(first):
+def next_line():
+	second =  session.attributes['lyric line']
 
 	next_line, artist_song = read_songs()
-	msg = next_line[first]
+	msg = next_line[second]
 	return question(msg)
 
-# @ask.intent("YoutubeIntent", convert={'first':str})
-# def youtube():
-# 	return 0
-
+def youtube():
+	return question('paddy implement this !')
 
 
 if __name__ == '__main__':
