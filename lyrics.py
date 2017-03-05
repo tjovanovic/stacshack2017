@@ -19,6 +19,7 @@ TOP_URL_FORMAT = 'http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&li
 
 lyrics_pattern = re.compile(r'&lt;lyrics&gt;(.*)&lt;/lyrics&gt;', re.DOTALL)
 redirect_pattern = re.compile(r'#REDIRECT \[\[(.*):(.*)]]')
+non_alphanum_pattern = re.compile(r'[^ 0-9a-z]+')
 
 
 def fetch_url(url):
@@ -59,7 +60,7 @@ def fetch_lyrics(artist, title):
 
     lines = []
     for line in lyrics_text.split('\n'):
-        line = html.unescape(line).strip()
+        line = non_alphanum_pattern.sub('', html.unescape(line).strip().lower())
         if line:
             lines.append(line)
 
@@ -84,7 +85,7 @@ def save_songs():
     # print(fetch_lyrics('Adele', "That's It, I Quit, I'm Movin' On"))
     next_line = {}
     artist_song = {}
-    for artist, title in fetch_top(10):
+    for artist, title in fetch_top(100):
         lyrics = fetch_lyrics(artist, title)
         if lyrics:
             for line in lyrics:
@@ -103,9 +104,9 @@ def read_songs():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-    save_songs()
+    # save_songs()
     next_line, artist_song = read_songs()
     for bla in next_line.keys():
-        print(bla.replace('\'', ''))
+        print(bla)
     # print(next_line.keys())
     # print(artist_song)
