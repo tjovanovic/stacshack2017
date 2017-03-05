@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 import html
 import pickle
 
-import local_settings
+#import local_settings
 
 
 logger = logging.getLogger(__name__)
@@ -116,7 +116,7 @@ def save_songs():
 
 
 def read_songs():
-    return pickle.load(open('songs', 'rb'))
+    return pickle.load(open('/Users/patrick.green/stacshack2017/src/songs.txt', 'rb'))
 
 
 if __name__ == '__main__':
